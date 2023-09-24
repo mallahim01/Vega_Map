@@ -1,0 +1,94 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Per capita Electricity generation 2021 (kwh/person)",
+    "width": 800,
+    "height": 400,
+    "projection": {
+        "type": "equalEarth"
+    },
+    "layer": [
+        {
+            "data": {
+                "url": "ne_10m_ocean.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "ne_10m_ocean"
+                }
+            },
+            "mark": {
+                "type": "geoshape",
+                "fill": "skyblue"
+            }
+        },
+        {
+            "data":{
+                "url": "ne_110m_graticules_30.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "ne_110m_graticules_30"
+                }
+            },
+            "mark": {
+                "type": "geoshape",
+                "fill": null,
+                "stroke": "lightgray"
+            }
+        },
+        {
+            "data": {
+                "url": "ne_110m_admin_0_countries.json",
+                "format":{
+                    "type": "topojson",
+                    "feature": "ne_110m_admin_0_countries"
+                }
+            },
+            "transform": [
+                {
+                    "lookup": "properties.NAME",
+                    "from":{
+                        "data":{
+                            "url": "per-capita-electricity-generation.csv"
+                        },
+                        "key": "Entity",
+                        "fields": [
+                            "Per capita electricity (kWh)"
+                        ]
+                    }
+                }
+            ],
+            "mark": {
+                "type": "geoshape",
+                "stroke": "black",
+                "strokeWidth":0.5
+            },
+            "encoding": {
+                "color":{
+                    "field": "Per capita electricity (kWh)",
+                    "type": "quantitative",
+                    "title": "Energy Consumption",
+                    "scale": {
+                        "type": "threshold",
+                        "domain": [
+                            1000,
+                            2000,
+                            3000,
+                            4000
+
+                        ]
+                    }
+                },
+                "tooltip": [
+                    {
+                        "field": "properties.NAME",
+                        "type": "nominal",
+                        "title": "country"
+                    },
+                    {
+                        "field": "Per capita electricity (kWh)",
+                        "type": "quantitative"
+                    }
+                ]
+            }
+        }
+    ]
+}
